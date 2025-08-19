@@ -1,0 +1,29 @@
+paths:
+  raw_data: artifacts/data/raw/Electronics_5.json
+  preprocessed_data: artifacts/data/processed/processed_product_reviews.parquet
+  generated_data: artifacts/data/generated/instruction_answers.jsonl
+
+huggingface:
+  dataset_repo: sdelowar2/product-reviews-pros-cons
+  model_repo: sdelowar2/llama-8b-review-pros-cons-finetuned
+
+generation:
+  model: gpt-4o-mini
+  temperature: 0.3
+  
+
+training:
+  base_model: meta-llama/Llama-3-8b
+  output_dir: artifacts/models/llama-8b-pros-cons
+  epochs: 3
+  per_device_train_batch_size: 2
+  gradient_accumulation_steps: 4
+  learning_rate: 2e-5
+  lr_scheduler_type: linear
+  warmup_ratio: 0.03
+  weight_decay: 0.01
+  save_steps: 500
+  logging_steps: 50
+  evaluation_strategy: steps
+  eval_steps: 500
+  push_to_hub: true
