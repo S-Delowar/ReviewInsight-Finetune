@@ -32,7 +32,7 @@ def main(output_dir: str = "artifacts/finetuned_model") -> None:
     model = load_peft_model()
     
     # Prepare trainer
-    trainer = get_trainer(model, tokenizer, dataset)
+    trainer = get_trainer(model, dataset)
     
     print("========Training Starts=======")
     trainer.train()
