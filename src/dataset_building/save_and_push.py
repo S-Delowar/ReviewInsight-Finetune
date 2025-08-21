@@ -2,7 +2,7 @@ import json
 import os
 from datasets import Dataset
 
-def save_to_jsonl(df, save_path: str):
+def save_to_jsonl(df, save_path: str) -> None:
     """
     Save dataset to JSONL format.
     """
@@ -15,7 +15,7 @@ def save_to_jsonl(df, save_path: str):
     print(f"Saved dataset locally at {save_path}")
 
 
-def push_to_huggingface(df, repo_id: str, private: bool = True):
+def push_to_huggingface(df, repo_id: str, private: bool = True) -> None:
     """
     Push dataset to Hugging Face Hub.
     """

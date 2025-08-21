@@ -1,7 +1,8 @@
 import os
 import random
+import pandas as pd
 
-def limit_reviews_per_product(df, save_path_preprocessed: str, min_reviews=5, max_reviews=15, review_col="reviews"):
+def limit_reviews_per_product(df, save_path_preprocessed: str, min_reviews=5, max_reviews=15, review_col="reviews") -> pd.DataFrame:
     """
     Keep only products with a minimum number of reviews and limit maximum reviews per product.
     
