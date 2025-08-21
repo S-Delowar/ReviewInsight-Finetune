@@ -5,6 +5,10 @@ from datasets import DatasetDict
 
 from src.utils.config_loader import load_config
 
+import datetime
+
+run_name = f"finetune-{datetime.datetime.now().strftime('%Y%m%d-%H%M')}"
+
 
 def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer:
     """
@@ -25,6 +29,7 @@ def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer
     
     training_args = TrainingArguments(
         output_dir= trainer_cfg["output_dir"],
+        run_name=run_name,
         num_train_epochs= int(trainer_cfg["num_train_epochs"]),
         learning_rate= float(trainer_cfg["learning_rate"]),
         lr_scheduler_type= trainer_cfg["lr_scheduler_type"],

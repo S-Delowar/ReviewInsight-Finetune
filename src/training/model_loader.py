@@ -60,8 +60,6 @@ def load_peft_model() -> AutoModelForCausalLM:
         device_map = "auto"  
     )
     
-    base_model.gradient_checkpointing_enable()
-
     peft_config = get_peft_config()
     peft_model = get_peft_model(base_model, peft_config)
     print(f"Memory footprint for the model: {peft_model.get_memory_footprint() / 1024**2:.2f} MB")
