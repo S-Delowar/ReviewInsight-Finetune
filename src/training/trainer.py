@@ -1,12 +1,12 @@
 import torch
-from transformers import TrainingArguments, PreTrainedModel, PreTrainedTokenizer
+from transformers import TrainingArguments, AutoModelForCausalLM
 from trl import SFTTrainer
 from datasets import DatasetDict
 
 from src.utils.config_loader import load_config
 
 
-def get_trainer(model: PreTrainedModel, dataset: DatasetDict) -> SFTTrainer:
+def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer:
     """
     Initialize and return an SFTTrainer with configuration from project settings.
 
