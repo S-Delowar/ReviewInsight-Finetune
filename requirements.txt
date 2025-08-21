@@ -16,3 +16,7 @@ trl==0.21.0
 wandb==0.21.1
 evaluate==0.4.5
 scikit-learn==1.7.1
+torchvision==0.23.0
+torch==2.8.0
+
+
