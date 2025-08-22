@@ -8,14 +8,14 @@ generation:
   temperature: 0.3
 
 huggingface:
-  dataset_repo: sdelowar2/product-reviews-pros-cons
+  dataset_repo: sdelowar2/optimized_product_reviews_with_insight
   finetuned_model_repo: sdelowar2/llama-8b-finetuned-review-insight
 
 fine_tune:
   base_model:
     name: "meta-llama/Llama-3.2-3B-Instruct"
     load_in_4bit: True
-    max_length: 1600
+    max_length: 512
 
   dataset:
     split_ratio: [0.8, 0.1, 0.1]   # train, val, test
@@ -38,7 +38,7 @@ fine_tune:
     r: 16
     lora_alpha: 32
     lora_dropout: 0.05
-    target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+    target_modules: ["q_proj", "v_proj"]
     bias: "none"
     task_type: "CAUSAL_LM"
 

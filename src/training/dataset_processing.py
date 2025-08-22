@@ -39,8 +39,8 @@ def load_process_dataset(tokenizer, subset_size: int =10) -> dict:
     # Load full dataset
     dataset = load_dataset(dataset_repo, split="train")
 
-    # 👇 Limit samples for debugging
-    dataset = dataset.select(range(min(subset_size, len(dataset))))
+    # Limit samples for debugging
+    # dataset = dataset.select(range(min(subset_size, len(dataset))))
     
     # Ratios from config
     train_ratio, val_ratio, test_ratio = cfg["dataset"]["split_ratio"]
