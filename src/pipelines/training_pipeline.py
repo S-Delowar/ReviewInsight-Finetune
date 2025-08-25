@@ -1,4 +1,5 @@
 import os
+import argparse
 from src.training.dataset_processing import load_process_dataset
 from src.training.model_loader import load_tokenizer, load_peft_model
 from src.training.trainer import get_trainer
@@ -8,20 +9,12 @@ from src.utils.config_loader import load_config
 hf_model_repo_finetuned = load_config()["huggingface"]["finetuned_model_repo"]
 
 
-def main(output_dir: str = "artifacts/finetuned_model") -> None:
+def main(save_dir: str) -> None:
     """
-    Run the fine-tuning pipeline:
-    - Initialize Weights & Biases logging
-    - Load tokenizer, dataset, and PEFT model
-    - Train the model with SFTTrainer
-    - Save tokenizer and adapters locally to `output_dir`
-
-    Args:
-        output_dir (str, optional): Directory to save tokenizer and trained adapters.
-                                    Defaults to './artifacts/finetuned_model'.
+    Train PEFT model and save adapters + tokenizer locally.
     """
     
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(save_dir, exist_ok=True)
     
     # Initialize wandb logging
     init_wandb()
@@ -40,11 +33,16 @@ def main(output_dir: str = "artifacts/finetuned_model") -> None:
     print("========Training Finished!=======")
 
     # Save final artifacts manually
-    tokenizer.save_pretrained(output_dir)
-    trainer.model.save_pretrained(output_dir)
-    print(f"Tokenizer and adapters saved successfully to {output_dir}")
+    tokenizer.save_pretrained(save_dir)
+    trainer.model.save_pretrained(save_dir)
+    print(f"Tokenizer and adapters saved successfully to {save_dir}")
 
 
-if __name__=="__main__":
-    output_dir = os.getenv("OUTPUT_DIR", "artifacts/finetuned_model")
-    main(output_dir=output_dir)
+if __name__=="__main__":  
+    parser = argparse.ArgumentParser(description="Train PEFT model and save adapters")
+    parser.add_argument("--save_dir", type=str, default="artifacts/finetuned_model")
+    
+    args = parser.parse_args()
+    
+    main(save_dir=args.save_dir)
+    

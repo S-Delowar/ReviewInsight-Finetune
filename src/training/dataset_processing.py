@@ -22,7 +22,7 @@ def format_as_messages(example: dict) -> dict:
     }
     
 
-def load_process_dataset(tokenizer, subset_size: int =10) -> dict:
+def load_process_dataset(tokenizer, subset_size: int =100) -> dict:
     """
     Load dataset, split into train/val/test, format as chat messages, and tokenize.
 
@@ -40,7 +40,7 @@ def load_process_dataset(tokenizer, subset_size: int =10) -> dict:
     dataset = load_dataset(dataset_repo, split="train")
 
     # Limit samples for debugging
-    # dataset = dataset.select(range(min(subset_size, len(dataset))))
+    dataset = dataset.select(range(min(subset_size, len(dataset))))
     
     # Ratios from config
     train_ratio, val_ratio, test_ratio = cfg["dataset"]["split_ratio"]

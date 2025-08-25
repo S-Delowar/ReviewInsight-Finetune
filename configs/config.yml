@@ -32,6 +32,7 @@ fine_tune:
     weight_decay: 0.01
     warmup_steps: 10
     seed: 0
+    eval_strategy: "epoch"
     save_strategy: "epoch"
 
   peft:

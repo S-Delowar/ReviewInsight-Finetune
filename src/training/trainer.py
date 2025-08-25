@@ -3,6 +3,7 @@ from transformers import TrainingArguments, AutoModelForCausalLM
 from trl import SFTTrainer
 from datasets import DatasetDict
 
+from src.evaluation import compute_metrics
 from src.utils.config_loader import load_config
 
 import datetime
@@ -40,6 +41,7 @@ def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer
         weight_decay= float(trainer_cfg["weight_decay"]),
         warmup_steps= int(trainer_cfg["warmup_steps"]),
         seed= int(trainer_cfg["seed"]),
+        eval_strategy= trainer_cfg["eval_strategy"],
         save_strategy= trainer_cfg["save_strategy"],
         fp16= not bf16_supported,
         bf16= bf16_supported,
@@ -51,6 +53,7 @@ def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer
         train_dataset= dataset["train"],
         eval_dataset= dataset["validation"],
         args= training_args,
+        compute_metrics=compute_metrics
     )
     
     print("Trainer initiated")
