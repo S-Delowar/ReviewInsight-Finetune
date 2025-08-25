@@ -33,6 +33,7 @@ fine_tune:
     warmup_steps: 10
     seed: 0
     eval_strategy: "epoch"
+    per_device_eval_batch_size: 1
     save_strategy: "epoch"
 
   peft:

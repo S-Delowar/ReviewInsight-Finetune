@@ -3,7 +3,7 @@ from transformers import TrainingArguments, AutoModelForCausalLM
 from trl import SFTTrainer
 from datasets import DatasetDict
 
-from src.evaluation import compute_metrics
+from src.evaluation.compute_metrics import compute_metrics
 from src.utils.config_loader import load_config
 
 import datetime
@@ -42,10 +42,11 @@ def get_trainer(model: AutoModelForCausalLM, dataset: DatasetDict) -> SFTTrainer
         warmup_steps= int(trainer_cfg["warmup_steps"]),
         seed= int(trainer_cfg["seed"]),
         eval_strategy= trainer_cfg["eval_strategy"],
+        per_device_eval_batch_size = trainer_cfg["per_device_eval_batch_size"],
         save_strategy= trainer_cfg["save_strategy"],
         fp16= not bf16_supported,
         bf16= bf16_supported,
-        report_to= "wandb"
+        report_to= "wandb",
     )    
     
     trainer = SFTTrainer(
