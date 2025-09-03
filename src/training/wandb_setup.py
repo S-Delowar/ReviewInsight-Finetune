@@ -8,7 +8,7 @@ load_dotenv()
 wandb_cfg = load_config()["fine_tune"]["wandb"]
 
 
-def init_wandb() -> None:
+def init_wandb(run_name: str = None, tags: list = None, notes: str = None) -> None:
     """
     Initialize Weights & Biases (wandb) for experiment tracking.
     """
@@ -16,5 +16,7 @@ def init_wandb() -> None:
     wandb.init(
         project=wandb_cfg["project"],
         entity=os.getenv("WANDB_ENTITY"),
-        name=wandb_cfg["run_name"]
+        name=run_name or wandb_cfg["run_name"],
+        tags=tags,
+        notes=notes,
     )

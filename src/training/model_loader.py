@@ -14,18 +14,20 @@ load_dotenv()
 cfg = load_config()["fine_tune"]
 
 # Configure quantization
-if cfg["base_model"]["load_in_4bit"] == True:
-    quant_config = BitsAndBytesConfig(
-      load_in_4bit=True,
-      bnb_4bit_use_double_quant=True,
-      bnb_4bit_compute_dtype=torch.bfloat16,
-      bnb_4bit_quant_type="nf4"
-    )
-else:
-    quant_config = BitsAndBytesConfig(
-      load_in_8bit=True,
-      bnb_8bit_compute_dtype=torch.bfloat16
-    )
+def get_quant_config():
+    if cfg["base_model"]["load_in_4bit"] == True:
+        quant_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_quant_type="nf4"
+        )
+    else:
+        quant_config = BitsAndBytesConfig(
+        load_in_8bit=True,
+        bnb_8bit_compute_dtype=torch.bfloat16
+        )
+    return quant_config
   
   
 # Login to Hugging Face Hub
@@ -56,7 +58,7 @@ def load_peft_model() -> AutoModelForCausalLM:
     """
     base_model = AutoModelForCausalLM.from_pretrained(
         cfg["base_model"]["name"],
-        quantization_config = quant_config,
+        quantization_config = get_quant_config(),
         device_map = "auto"  
     )
     

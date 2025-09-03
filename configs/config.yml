@@ -9,7 +9,7 @@ generation:
 
 huggingface:
   dataset_repo: sdelowar2/optimized_product_reviews_with_insight
-  finetuned_model_repo: sdelowar2/llama-8b-finetuned-review-insight
+  finetuned_model_repo: sdelowar2/llama3.2-reviews-insight-lora
 
 fine_tune:
   base_model:
@@ -40,7 +40,7 @@ fine_tune:
     r: 16
     lora_alpha: 32
     lora_dropout: 0.05
-    target_modules: ["q_proj", "v_proj"]
+    target_modules: ["q_proj", "k_proj", "v_proj", "o_proj"]
     bias: "none"
     task_type: "CAUSAL_LM"
 
