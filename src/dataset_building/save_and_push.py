@@ -8,11 +8,10 @@ def save_to_jsonl(df, save_path: str) -> None:
     """
     # Ensure parent directories exist
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
-  
-    with open(save_path, "w", encoding="utf-8") as f:
-        for _, row in df.iterrows():
-            f.write(json.dumps(row.to_dict(), ensure_ascii=False) + "\n")
-    print(f"Saved dataset locally at {save_path}")
+    
+    # Save as JSONL format
+    df.to_json(save_path, orient="records", force_ascii=False, lines=True)
+    print(f"Saved {len(df)} records locally at {save_path}")
 
 
 def push_to_huggingface(df, repo_id: str, private: bool = True) -> None:
