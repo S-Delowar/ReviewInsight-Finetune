@@ -14,7 +14,7 @@ def save_to_jsonl(df, save_path: str) -> None:
     print(f"Saved {len(df)} records locally at {save_path}")
 
 
-def push_to_huggingface(df, repo_id: str, private: bool = True) -> None:
+def push_df_to_huggingface(df, repo_id: str, private: bool = False) -> None:
     """
     Push dataset to Hugging Face Hub.
     """

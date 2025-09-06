@@ -44,7 +44,7 @@ def process_row(row):
     }
 
 
-def build_instruction_answer_dataset(parquet_path: str, sample_size: int = None, max_workers: int = 10) -> pd.DataFrame:
+def build_instruction_answer_dataset(parquet_path: str, sample_size: int = None, max_workers: int) -> pd.DataFrame:
     df = pd.read_parquet(parquet_path)
     if sample_size:
         df = df.head(sample_size)
@@ -63,12 +63,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Build instruction dataset with pros/cons")
     parser.add_argument("--reviews_file_path", type=str, required=True, help="Path to input parquet file")
     parser.add_argument("--output_file", type=str, required=True, help="Path to save output JSON")
+    parser.add_argument("--sample_size", type=int, help="Total samples")
     parser.add_argument("--max_workers", type=int, default=10, help="Number of parallel workers")
 
     args = parser.parse_args()
 
     print(f"Loading data from {args.reviews_file_path}")
-    df_out = build_instruction_answer_dataset(parquet_path=args.reviews_file_path, max_workers=args.max_workers)
+    df_out = build_instruction_answer_dataset(parquet_path=args.reviews_file_path, max_workers=args.max_workers, sample_size=args.sample_size)
 
     print(f"Generated pros/cons dataset")
     
