@@ -44,7 +44,7 @@ def process_row(row):
     }
 
 
-def build_instruction_answer_dataset(parquet_path: str, sample_size: int = None, max_workers: int) -> pd.DataFrame:
+def build_instruction_answer_dataset(parquet_path: str, sample_size: int = None, max_workers: int = 4) -> pd.DataFrame:
     df = pd.read_parquet(parquet_path)
     if sample_size:
         df = df.head(sample_size)
