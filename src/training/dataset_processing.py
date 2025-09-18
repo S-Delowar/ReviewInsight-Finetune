@@ -8,7 +8,6 @@ dataset_repo = cfg_root["huggingface"]["dataset_repo"]
 SYSTEM_PROMPT = "You are an assistant that extracts pros and cons from product reviews. Return only valid JSON with keys pros and cons."
 
 def _reviews_to_bullets(reviews):
-    # Deterministic, readable presentation for the user turn
     return "\n".join([f"- {r.strip()}" for r in reviews if isinstance(r, str) and r.strip()])
 
 def _build_messages(example: dict) -> dict:
@@ -26,12 +25,12 @@ def _build_messages(example: dict) -> dict:
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": user_content},
-            {"role": "assistant", "content": answer},  # gold JSON (text)
+            {"role": "assistant", "content": answer},
         ],
-        "answer": answer,  # keep for metrics
+        "answer": answer,
     }
 
-def load_process_dataset(tokenizer, subset_size: int | None = None) -> DatasetDict:
+def load_process_dataset(tokenizer, subset_size: int | None) -> DatasetDict:
     """
     Load dataset from HF Hub, map to chat messages + keep raw gold 'answer'.
     """
@@ -43,6 +42,11 @@ def load_process_dataset(tokenizer, subset_size: int | None = None) -> DatasetDi
     # Optional subsetting for quick experiments
     if subset_size is not None:
         data = data.select(range(min(subset_size, len(data))))
+        print(f"Using dataset subset of size: {len(data)}")
+    else:
+        print(f"Using full dataset of size: {len(data)}")
+
+
 
     # Map to messages + answer (no tokenization)
     data = data.map(_build_messages, remove_columns=[c for c in data.column_names if c not in {"instruction", "input", "answer"}])

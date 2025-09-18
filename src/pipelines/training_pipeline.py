@@ -11,7 +11,7 @@ from huggingface_hub import HfApi
 hf_repo_finetuned = load_config()["huggingface"]["finetuned_model_repo"]
 
 
-def main(save_dir: str, ds_subset_size:int) -> None:
+def main(save_dir: str, ds_subset_size:int | None) -> None:
     """
     Train PEFT model and save adapters + tokenizer locally.
     """
@@ -53,7 +53,9 @@ def main(save_dir: str, ds_subset_size:int) -> None:
 if __name__=="__main__":  
     parser = argparse.ArgumentParser(description="Train PEFT model and save adapters")
     parser.add_argument("--save_dir", type=str, default="artifacts/finetuned_model")
-    parser.add_argument("--ds_subset_size", type=int, default=100)
+    parser.add_argument("--ds_subset_size", type=int, default=None, 
+                        help="Optional subset size for quick experiments. Use full dataset if not set.")
+    
     
     args = parser.parse_args()
     
