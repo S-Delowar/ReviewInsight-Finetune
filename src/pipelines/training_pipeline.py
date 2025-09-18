@@ -5,11 +5,13 @@ from src.training.wandb_setup import init_wandb
 from src.utils.config_loader import load_config
 from src.training.dataset_processing import load_process_dataset
 from src.training.trainer import get_trainer
+from huggingface_hub import HfApi
 
-hf_model_repo_finetuned = load_config()["huggingface"]["finetuned_model_repo"]
+
+hf_repo_finetuned = load_config()["huggingface"]["finetuned_model_repo"]
 
 
-def main(save_dir: str) -> None:
+def main(save_dir: str, ds_subset_size:int) -> None:
     """
     Train PEFT model and save adapters + tokenizer locally.
     """
@@ -18,7 +20,7 @@ def main(save_dir: str) -> None:
     
     # Load tokenizer, dataset, and model
     tokenizer = load_tokenizer()
-    dataset = load_process_dataset(tokenizer, subset_size=100)
+    dataset = load_process_dataset(tokenizer, subset_size=ds_subset_size)
     model = load_peft_model()
     
     # Prepare trainer
@@ -29,18 +31,31 @@ def main(save_dir: str) -> None:
     
     print("========Training Finished!=======")
 
-    # Save final artifacts manually
+    # Save tokenizer and model locally
     os.makedirs(save_dir, exist_ok=True)
     tokenizer.save_pretrained(save_dir)
     trainer.model.save_pretrained(save_dir)
     print(f"Tokenizer and adapters saved successfully to {save_dir}")
+    
+    
+    # Push to HF Hub
+    api = HfApi()
+    api.create_repo(hf_repo_finetuned, exist_ok=True)
+    trainer.model.push_to_hub(hf_repo_finetuned)
+    tokenizer.push_to_hub(hf_repo_finetuned)
+
+    print(f"Model pushed to {hf_repo_finetuned}")
+        
+        
+    
 
 
 if __name__=="__main__":  
     parser = argparse.ArgumentParser(description="Train PEFT model and save adapters")
     parser.add_argument("--save_dir", type=str, default="artifacts/finetuned_model")
+    parser.add_argument("--ds_subset_size", type=int, default=100)
     
     args = parser.parse_args()
     
-    main(save_dir=args.save_dir)
+    main(save_dir=args.save_dir, ds_subset_size= args.ds_subset_size)
     

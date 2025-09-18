@@ -34,7 +34,7 @@ def compute_metrics(eval_preds):
     predictions, labels = eval_preds
 
     # Get token IDs from logits
-    if isinstance(predictions, tuple):  # sometimes Trainer returns (logits, ...)
+    if isinstance(predictions, tuple): 
         predictions = predictions[0]
 
     pred_ids = np.argmax(predictions, axis=-1)

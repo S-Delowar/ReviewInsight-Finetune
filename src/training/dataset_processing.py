@@ -34,7 +34,6 @@ def _build_messages(example: dict) -> dict:
 def load_process_dataset(tokenizer, subset_size: int | None = None) -> DatasetDict:
     """
     Load dataset from HF Hub, map to chat messages + keep raw gold 'answer'.
-    No tokenization here — SFTTrainer will handle it via the chat template.
     """
     print("Dataset loading and preprocessing starts...")
 
