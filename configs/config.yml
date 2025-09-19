@@ -9,11 +9,11 @@ generation:
 
 huggingface:
   dataset_repo: sdelowar2/product_reviews_insight_10k
-  finetuned_model_repo: sdelowar2/llama3.2-reviews-insight-lora
+  finetuned_model_repo: sdelowar2/mistral-7B-reviews-insight-lora
 
 fine_tune:
   base_model:
-    name: "meta-llama/Llama-3.2-3B-Instruct"
+    name: "mistralai/Mistral-7B-Instruct-v0.2"
     load_in_4bit: True
     max_length: 512
 
