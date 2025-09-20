@@ -13,7 +13,7 @@ def compute_semantic_f1(preds, refs):
     """Compute average semantic F1 score using BERTScore."""
     if not preds or not refs:
         return 0.0
-    results = bertscore(predictions=preds, references=refs, lang="en")
+    results = bertscore.compute(predictions=preds, references=refs, lang="en")
     return float(sum(results["f1"]) / len(results["f1"]))
 
 
