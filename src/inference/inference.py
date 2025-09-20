@@ -1,43 +1,44 @@
-import json
 import torch
+import json
 
-from src.inference.loader import load_model
+# ---------------------------
+# Inference function
+# ---------------------------
+def generate_pros_cons(tokenizer, model, reviews: list[str]):
+    SYSTEM_PROMPT = (
+        "You are an assistant that extracts pros and cons from product reviews. "
+        "Return only valid JSON with keys pros and cons."
+    )
 
-tokenizer, model = load_model()
+    user_content = (
+        "Instruction: Extract pros and cons from the following reviews.\nReviews:\n"
+        + "\n".join(f"- {r}" for r in reviews)
+    )
 
-def reviews_to_bullets(reviews):
-    return "\n".join([f"- {r.strip()}" for r in reviews if isinstance(r, str) and r.strip()])
-
-def build_messages(reviews: list[str]):
-    instruction = "Extract pros and cons from the following reviews."
-    user_content = f"Instruction: {instruction}\nReviews:\n{reviews_to_bullets(reviews)}"
-    return [
+    messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": user_content}
+        {"role": "user", "content": user_content},
     ]
 
-
-SYSTEM_PROMPT = "You are an assistant that extracts pros and cons from product reviews. Return only valid JSON with keys pros and cons."
-
-def generate_pros_cons(reviews: list[str], max_new_tokens=512):
-    messages = build_messages(reviews)
-    inputs = tokenizer.apply_chat_template(messages, return_tensors="pt").to(model.device)
+    input_ids = tokenizer.apply_chat_template(
+        messages,
+        tokenize=True,
+        return_tensors="pt",
+        add_generation_prompt=True
+    ).to(model.device)
 
     with torch.no_grad():
         outputs = model.generate(
-            inputs,
-            max_new_tokens=max_new_tokens,
-            do_sample=False,
-            temperature=0.0,
-            pad_token_id=tokenizer.eos_token_id
+            input_ids=input_ids,
+            max_new_tokens=300,
+            temperature=0.2,
+            do_sample=False
         )
 
-    decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    response = tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
 
-    # Try to extract JSON only
     try:
-        json_start = decoded.index("{")
-        json_end = decoded.rindex("}") + 1
-        return json.loads(decoded[json_start:json_end])
+        # return as dict
+        return json.loads(response)  # return as dict
     except Exception:
-        return {"pros": [], "cons": [], "raw_output": decoded}
+        return {"raw_output": response}
