@@ -16,7 +16,7 @@ client = OpenAI(api_key=api_key)
 
 llm_judge_model = load_config()["generation"]["model"]
 
-def run_llm_judge(model, tokenizer, test_data, device, subset_size=5):
+def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
     """
     Run qualitative evaluation using an LLM as a judge.
     - Samples a subset from test data
@@ -30,7 +30,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=5):
     table = wandb.Table(
         columns=[
             "instruction",
-            "prediction",
+            "response",
             "reference",
             "json_validity_judge",
             "pros_score",
@@ -46,22 +46,28 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=5):
         # For wandb logging only
         instruction_text = f"{sample['instruction']}\nReviews:\n" + "\n".join([f"- {review}" for review in sample["input"]])
         
-        # Build input for generation
-        input_text = tokenizer.apply_chat_template(
-            sample["messages"], tokenize=False, add_generation_prompt=False
-        )
-        inputs = tokenizer(
-            input_text,
+        
+        # Apply chat template
+        input_ids = tokenizer.apply_chat_template(
+            sample["messages"],
+            tokenize=True,
             return_tensors="pt",
-            truncation=True,
-            max_length=1024
-        ).to(device)
-        
-        # Generate prediction
-        output_ids = model.generate(inputs.input_ids, max_new_tokens=256, do_sample=False)
-        pred_text = tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
-        
-        # Reference answer
+            add_generation_prompt=False 
+        ).to(model.device)
+
+        # Generate
+        with torch.no_grad():
+            outputs = model.generate(
+                input_ids=input_ids,
+                max_new_tokens=300,
+                temperature=0.2,
+                do_sample=False
+            )
+            
+        # Decode
+        response = tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+
+        # Reference
         ref_text = sample["answer"]
             
         # === LLM-as-Judge: Structured Scoring ===
@@ -72,7 +78,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=5):
         {ref_text}
 
         Model Output JSON:
-        {pred_text}
+        {response}
 
         Evaluate on:
         - JSON validity (1 if valid, 0 if invalid) — use your own parsing, don't trust the model's claim
@@ -117,7 +123,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=5):
         # Add row to wandb table
         table.add_data(
             instruction_text,
-            pred_text,
+            response,
             ref_text,
             json_valid_judge,
             pros_score,

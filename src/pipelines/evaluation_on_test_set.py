@@ -14,7 +14,7 @@ cfg = load_config()["fine_tune"]
 fine_tuned_model_id = load_config()["huggingface"]["finetuned_model_repo"]
 
 
-def main(model_id: str = fine_tuned_model_id, subset_size_qualitative:int=5, device= DEVICE):
+def main(subset_size:int, model_id: str = fine_tuned_model_id,  device= DEVICE):
     # Init W&B
     init_wandb(
         run_name="evaluate_on_test_data",
@@ -24,6 +24,7 @@ def main(model_id: str = fine_tuned_model_id, subset_size_qualitative:int=5, dev
 
     # Load tokenizer & PEFT model
     tokenizer = AutoTokenizer.from_pretrained(model_id)
+    tokenizer.pad_token = tokenizer.eos_token
     
     base_model = AutoModelForCausalLM.from_pretrained(
         cfg["base_model"]["name"],
@@ -44,11 +45,11 @@ def main(model_id: str = fine_tuned_model_id, subset_size_qualitative:int=5, dev
 
     # LLM-as-judge
     print(f"Judgement starts with GPT-4o-mini")
-    table = run_llm_judge(model, tokenizer, test_data, DEVICE, subset_size=subset_size_qualitative)
+    table = run_llm_judge(model, tokenizer, test_data, DEVICE, subset_size=subset_size)
     wandb.log({"qualitative_eval": table})
 
     print("Evaluation complete by LLM-Judge.Qualitative table logged to W&B.")
 
 
 if __name__ == "__main__":
-    main()
+    main(subset_size=20)
