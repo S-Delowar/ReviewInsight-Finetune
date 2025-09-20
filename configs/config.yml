@@ -28,7 +28,7 @@ fine_tune:
     per_device_train_batch_size: 2
     gradient_accumulation_steps: 8
     logging_steps: 20
-    optim: "adamw_8bit"
+    optim: "adamw_torch"
     weight_decay: 0.01
     warmup_steps: 10
     seed: 0

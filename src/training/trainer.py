@@ -31,12 +31,12 @@ def get_trainer(model, tokenizer, dataset):
         weight_decay=float(trainer_cfg["weight_decay"]),
         warmup_steps=int(trainer_cfg["warmup_steps"]),
         seed=int(trainer_cfg["seed"]),
-        evaluation_strategy="epoch",   
+        evaluation_strategy=trainer_cfg["eval_strategy"],   
         save_strategy="epoch",        
         fp16=not bf16_supported,
         bf16=bf16_supported,
         report_to="wandb",
-        load_best_model_at_end=True,
+        load_best_model_at_end=False,
     )
 
     # Formatting function that uses the tokenizer's chat template
