@@ -46,10 +46,15 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
         # For wandb logging only
         instruction_text = f"{sample['instruction']}\nReviews:\n" + "\n".join([f"- {review}" for review in sample["input"]])
         
+        # Prepare messages for generation (exclude reference assistant message!)
+        messages = [
+            {"role": "system", "content": sample["messages"][0]["content"]},  # system
+            {"role": "user", "content": sample["messages"][1]["content"]},    # user
+        ]
         
         # Apply chat template
         input_ids = tokenizer.apply_chat_template(
-            sample["messages"],
+            messages,
             tokenize=True,
             return_tensors="pt",
             add_generation_prompt=False 
@@ -59,7 +64,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
         with torch.no_grad():
             outputs = model.generate(
                 input_ids=input_ids,
-                max_new_tokens=300,
+                max_new_tokens=100,
                 temperature=0.2,
                 do_sample=False
             )
@@ -78,7 +83,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
         {ref_text}
 
         Model Output JSON:
-        {response}
+        {model_response}
 
         Evaluate on:
         - JSON validity (1 if valid, 0 if invalid) — use your own parsing, don't trust the model's claim
