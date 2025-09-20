@@ -30,7 +30,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
     table = wandb.Table(
         columns=[
             "instruction",
-            "response",
+            "model_response",
             "reference",
             "json_validity_judge",
             "pros_score",
@@ -65,7 +65,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
             )
             
         # Decode
-        response = tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
+        model_response = tokenizer.decode(outputs[0][input_ids.shape[-1]:], skip_special_tokens=True)
 
         # Reference
         ref_text = sample["answer"]
@@ -123,7 +123,7 @@ def run_llm_judge(model, tokenizer, test_data, device, subset_size=100):
         # Add row to wandb table
         table.add_data(
             instruction_text,
-            response,
+            model_response,
             ref_text,
             json_valid_judge,
             pros_score,
