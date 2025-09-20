@@ -38,7 +38,7 @@ def main(subset_size:int, model_id: str = fine_tuned_model_id,  device= DEVICE):
     print("Loaded PEFT Model and Tokenizer")
     
     # Load dataset
-    dataset = load_process_dataset(tokenizer=tokenizer)
+    dataset = load_process_dataset(tokenizer=tokenizer, subset_size=None)
     test_data = dataset["test"]
     
     print("Loaded Test dataset")
