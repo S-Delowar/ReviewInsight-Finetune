@@ -1,5 +1,6 @@
 import os
 import argparse
+import torch
 from src.training.model_loader import load_tokenizer, load_peft_model
 from src.training.wandb_setup import init_wandb
 from src.utils.config_loader import load_config
@@ -45,6 +46,12 @@ def main(save_dir: str, ds_subset_size:int | None) -> None:
     tokenizer.push_to_hub(hf_repo_finetuned)
 
     print(f"Model pushed to {hf_repo_finetuned}")
+    
+    # Evaluate on validation set
+    torch.cuda.empty_cache()  # Clear memory before evaluation
+    results = trainer.evaluate()
+    print(results)
+
         
         
     
