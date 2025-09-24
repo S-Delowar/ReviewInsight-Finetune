@@ -14,6 +14,8 @@ This project provides a fine-tuned version of **Mistral-7B-Instruct-v0.2** using
 - ✅ Deployed as REST API using FastAPI + Modal (GPU-accelerated).
 - ✅ Quantized inference (4-bit NF4) for low memory usage.
 
+---
+
 ## Dataset Overview
 We have build custom dataset for this project.
 
@@ -52,6 +54,7 @@ You can find details on Huggingface Repo:
   }
 }
 ```
+
 ---
 
 ## Model Overview
@@ -86,6 +89,8 @@ You can find details on Huggingface Repo:
 - JSON Validity Rate: % of outputs with valid JSON structure.
 - Semantic F1 (Pros/Cons): Strict and loose F1 scores for semantic accuracy.
 - BERTScore: Measures semantic similarity between predictions and ground truth.
+
+---
 
 ## Quick Start with the Fine-tuned Model
 ### Installation
@@ -122,8 +127,6 @@ tokenizer.pad_token = tokenizer.eos_token
 # Load LoRA adapter
 model = PeftModel.from_pretrained(model, adapter_id)
 ```
-
----
 
 ### Inference Example
 
@@ -174,8 +177,10 @@ except Exception as e:
 
 ```
 
+---
+
 ### REST API (FastAPI + Modal)
-Deployed endpoint for scalable, low-latency inference.
+Deployed endpoint using fastapi and modal for scalable, low-latency inference.
 
 **Endpoint**
 
@@ -218,6 +223,8 @@ Send POST request to:
 }
 ```
 
+---
+
 ## Evaluation with LLM-as-Judge
 We evaluated model outputs on a test set using **GPT-4o-mini** as a judge. Metrics logged to **Weights & Biases** include:
 
@@ -227,6 +234,8 @@ We evaluated model outputs on a test set using **GPT-4o-mini** as a judge. Metri
 - Judge’s qualitative comment
 
 See src/evaluation/llm_judge.py for implementation.
+
+---
 
 ## Monitoring & Logging
 All training and evaluation runs are tracked via **Weights & Biases (W&B)**.
