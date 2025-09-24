@@ -240,5 +240,14 @@ See [src/evaluation/llm_judge.py](https://github.com/S-Delowar/ReviewInsight-Fin
 ## Monitoring & Logging
 All training and evaluation runs are tracked via **Weights & Biases (W&B)**.
 
-- Training loss, learning rate, GPU utilization
-- Qualitative LLM-judge evaluations in interactive tables
+- **Training loss, learning rate, GPU utilization**  
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/234f43b7-028c-45ae-8b5d-b63bec0b004e" alt="Training Metrics" width="600"/>
+  </p>
+
+- **Qualitative LLM-judge evaluations in interactive tables**  
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/fae4de9e-ee27-49c9-9460-716e7967c4dc" alt="LLM Judge Evaluation" width="600"/>
+  </p>
+
+
