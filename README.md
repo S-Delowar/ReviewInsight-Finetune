@@ -17,7 +17,7 @@ This project provides a fine-tuned version of **Mistral-7B-Instruct-v0.2** using
 ---
 
 ## Dataset Overview
-We have build custom dataset for this project.
+We have built a custom dataset for this project.
 
 You can find details on Huggingface Repo:
 [sdelowar2/product_reviews_insight_10k](https://huggingface.co/datasets/sdelowar2/product_reviews_insight_10k)
@@ -185,7 +185,7 @@ Deployed endpoint using fastapi and modal for scalable, low-latency inference.
 **Endpoint**
 
 Send POST request to:
-[https://mdelowar2230053--review-insights-llm-fastapi-app.modal.run/generate/](https://mdelowar2230053--review-insights-llm-fastapi-app.modal.run/generate/) 
+[https://mdelowar2230053--review-insights-llm-fastapi-app.modal.run/generate/]
 
 **Request Body (JSON)**
 ```json
@@ -233,7 +233,7 @@ We evaluated model outputs on a test set using **GPT-4o-mini** as a judge. Metri
 - Cons Accuracy Score (0-5)
 - Judge’s qualitative comment
 
-See src/evaluation/llm_judge.py for implementation.
+See [src/evaluation/llm_judge.py](https://github.com/S-Delowar/ReviewInsight-Finetune/blob/main/src/evaluation/llm_judge.py) for implementation.
 
 ---
 
