@@ -12,7 +12,6 @@ This project provides a fine-tuned version of **Mistral-7B-Instruct-v0.2** using
 - ✅ Qualitative evaluattion with **LLM-as-Judge (GPT-4o-mini)**.
 - ✅ **W&B integration** for experiment tracking and evaluation.
 - ✅ Deployed as REST API using FastAPI + Modal (GPU-accelerated).
-- ✅ Quantized inference (4-bit NF4) for low memory usage.
 
 ---
 
