@@ -7,7 +7,7 @@ This project provides a fine-tuned version of **Mistral-7B-Instruct-v0.2** using
 - ✅ Fine-tuned **Mistral-7B-Instruct-v0.2** with **LoRA adapters** (parameter-efficient).
 - ✅ Trained on **10,000 curated Amazon product reviews** → distilled into structured pros/cons.
 - ✅ Output: Valid **JSON** with `pros` and `cons` keys.
-- ✅ High JSON validity rate: **98.7%**.
+- ✅ JSON validity rate: **78.7%**.
 - ✅ Semantic F1 (Pros/Cons): **0.89 / 0.87**.
 - ✅ Qualitative evaluattion with **LLM-as-Judge (GPT-4o-mini)**.
 - ✅ **W&B integration** for experiment tracking and evaluation.
@@ -81,14 +81,12 @@ You can find details on Huggingface Repo:
 
 | Metric               | Score  |
 |----------------------|--------|
-| JSON Validity Rate   | 98.7%  |
+| JSON Validity Rate   | 78.7%  |
 | Semantic F1 (Pros)  | 0.89   |
 | Semantic F1 (Cons)  | 0.87   |
-| BERTScore            | 0.85   |
 
 - JSON Validity Rate: % of outputs with valid JSON structure.
-- Semantic F1 (Pros/Cons): Strict and loose F1 scores for semantic accuracy.
-- BERTScore: Measures semantic similarity between predictions and ground truth.
+- Semantic F1 (Pros/Cons): Average of Strict and loose F1 scores for semantic accuracy (using bert-score).
 
 ---
 
